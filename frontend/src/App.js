@@ -88,45 +88,52 @@ function App() {
 
   const fetchScorecard = async () => {
     try {
-      // Simulate scorecard data
-      // TODO: Replace with actual API calls
-      setScorecardData([
-        {
-          carrier: 'Delhivery',
-          dest_pin: '560001',
-          week: '2024-W01',
-          total_shipments: 1250,
-          on_time_percentage: 85.2,
-          rto_percentage: 8.5,
-          false_attempt_rate: 5.1,
-          suspect_ndr_rate: 2.8,
-          first_attempt_percentage: 78.9
-        },
-        {
-          carrier: 'Shiprocket',
-          dest_pin: '560002',
-          week: '2024-W01',
-          total_shipments: 890,
-          on_time_percentage: 79.3,
-          rto_percentage: 12.1,
-          false_attempt_rate: 9.8,
-          suspect_ndr_rate: 6.2,
-          first_attempt_percentage: 72.4
-        },
-        {
-          carrier: 'Delhivery',
-          dest_pin: '560003',
-          week: '2024-W01',
-          total_shipments: 675,
-          on_time_percentage: 88.7,
-          rto_percentage: 6.3,
-          false_attempt_rate: 4.2,
-          suspect_ndr_rate: 1.9,
-          first_attempt_percentage: 82.1
-        }
-      ]);
-      setLoading(false);
-      setLastUpdated(new Date());
+      const response = await fetch(`${BACKEND_URL}/api/analytics/scorecard`);
+      if (response.ok) {
+        const data = await response.json();
+        setScorecardData(data);
+        setLoading(false);
+        setLastUpdated(new Date());
+      } else {
+        // Fallback to mock data
+        setScorecardData([
+          {
+            carrier: 'Delhivery',
+            dest_pin: '560001',
+            week: '2024-W01',
+            total_shipments: 1250,
+            on_time_percentage: 85.2,
+            rto_percentage: 8.5,
+            false_attempt_rate: 5.1,
+            suspect_ndr_rate: 2.8,
+            first_attempt_percentage: 78.9
+          },
+          {
+            carrier: 'Shiprocket',
+            dest_pin: '560002',
+            week: '2024-W01',
+            total_shipments: 890,
+            on_time_percentage: 79.3,
+            rto_percentage: 12.1,
+            false_attempt_rate: 9.8,
+            suspect_ndr_rate: 6.2,
+            first_attempt_percentage: 72.4
+          },
+          {
+            carrier: 'Delhivery',
+            dest_pin: '560003',
+            week: '2024-W01',
+            total_shipments: 675,
+            on_time_percentage: 88.7,
+            rto_percentage: 6.3,
+            false_attempt_rate: 4.2,
+            suspect_ndr_rate: 1.9,
+            first_attempt_percentage: 82.1
+          }
+        ]);
+        setLoading(false);
+        setLastUpdated(new Date());
+      }
     } catch (err) {
       setError('Failed to fetch scorecard data');
       setLoading(false);
