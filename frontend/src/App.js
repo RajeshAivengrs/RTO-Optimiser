@@ -57,8 +57,24 @@ function App() {
 
   const fetchKPIs = async () => {
     try {
-      // For now, simulate KPI data since we don't have actual data yet
-      // TODO: Replace with actual API calls once we have data
+      const response = await fetch(`${BACKEND_URL}/api/analytics/kpis`);
+      if (response.ok) {
+        const data = await response.json();
+        setKpiData(data);
+      } else {
+        // Fallback to mock data if API fails
+        setKpiData({
+          rto_rate: 12.5,
+          adoption_rate: 78.3,
+          delay_vs_promise: -2.1,
+          cod_to_prepaid: 15.7,
+          false_attempt_rate: 8.2,
+          suspect_ndr_rate: 4.1
+        });
+      }
+    } catch (err) {
+      setError('Failed to fetch KPI data');
+      // Fallback to mock data
       setKpiData({
         rto_rate: 12.5,
         adoption_rate: 78.3,
@@ -67,8 +83,6 @@ function App() {
         false_attempt_rate: 8.2,
         suspect_ndr_rate: 4.1
       });
-    } catch (err) {
-      setError('Failed to fetch KPI data');
     }
   };
 
