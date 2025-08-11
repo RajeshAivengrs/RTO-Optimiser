@@ -95,7 +95,7 @@ class Order(Base):
     order_date = Column(DateTime(timezone=True), nullable=False)
     promised_delivery_date = Column(DateTime(timezone=True), nullable=True)
     status = Column(String(50), default="PLACED")
-    metadata = Column(JSONB, default={})
+    order_metadata = Column(JSONB, default={})
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(TIMEZONE))
     updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(TIMEZONE), onupdate=lambda: datetime.now(TIMEZONE))
     
