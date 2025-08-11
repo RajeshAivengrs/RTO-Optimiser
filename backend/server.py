@@ -446,7 +446,7 @@ async def webhook_order(
             payment_mode=request.payment_mode,
             order_date=order_date,
             promised_delivery_date=promised_date,
-            metadata=request.metadata
+            order_metadata=request.metadata
         )
         db.add(order)
         await db.flush()
