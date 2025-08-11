@@ -233,25 +233,26 @@ async def logging_middleware(request: Request, call_next):
     
     start_time = datetime.now()
     
-    with structlog.contextvars.bind_contextvars(request_id=request_id):
-        logger.info(
-            "Request started",
-            method=request.method,
-            url=str(request.url),
-            client=request.client.host if request.client else None
-        )
-        
-        response = await call_next(request)
-        
-        process_time = (datetime.now() - start_time).total_seconds()
-        
-        logger.info(
-            "Request completed",
-            status_code=response.status_code,
-            process_time=process_time
-        )
-        
-        return response
+    logger.info(
+        "Request started",
+        request_id=request_id,
+        method=request.method,
+        url=str(request.url),
+        client=request.client.host if request.client else None
+    )
+    
+    response = await call_next(request)
+    
+    process_time = (datetime.now() - start_time).total_seconds()
+    
+    logger.info(
+        "Request completed",
+        request_id=request_id,
+        status_code=response.status_code,
+        process_time=process_time
+    )
+    
+    return response
 
 # Health check endpoint
 @app.get("/api/health")
