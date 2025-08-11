@@ -663,9 +663,9 @@ async def ndr_resolution(
                 order.status = "RTO_INITIATED"
         
         # Update order metadata with resolution
-        if not order.metadata:
-            order.metadata = {}
-        order.metadata["ndr_resolution"] = resolution_data
+        if not order.order_metadata:
+            order.order_metadata = {}
+        order.order_metadata["ndr_resolution"] = resolution_data
         
         await db.commit()
         
