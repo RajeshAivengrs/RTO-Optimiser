@@ -220,7 +220,7 @@ async def lifespan(app: FastAPI):
     
     # Shutdown
     logger.info("Shutting down RTO Optimizer API")
-    if client:
+    if client is not None:
         client.close()
 
 app = FastAPI(
