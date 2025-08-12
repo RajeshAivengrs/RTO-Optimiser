@@ -44,8 +44,7 @@ class NDRChallenge(BaseModel):
 @router.get("/dashboard/{brand_id}", response_model=SellerKPIResponse)
 async def get_seller_dashboard(
     brand_id: str,
-    period: str = Query("week", enum=["day", "week", "month"]),
-    db = Depends(get_database)
+    period: str = Query("week", enum=["day", "week", "month"])
 ):
     """Get seller-specific dashboard with accountability metrics"""
     try:
