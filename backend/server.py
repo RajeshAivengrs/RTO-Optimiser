@@ -183,42 +183,45 @@ async def lifespan(app: FastAPI):
     # Startup
     logger.info("Starting RTO Optimizer API")
     try:
-        # Test MongoDB connection
-        await client.admin.command('ismaster')
-        logger.info("MongoDB connection successful")
-        
-        # Create indexes for better performance
-        await collections["orders"].create_index("order_id", unique=True)
-        await collections["orders"].create_index("brand_id")
-        await collections["orders"].create_index("status")
-        await collections["orders"].create_index("payment_mode")
-        
-        await collections["shipments"].create_index("shipment_id", unique=True)
-        await collections["shipments"].create_index("order_id")
-        await collections["shipments"].create_index("carrier")
-        await collections["shipments"].create_index("current_status")
-        
-        await collections["courier_events"].create_index("shipment_id")
-        await collections["courier_events"].create_index("event_code")
-        await collections["courier_events"].create_index("ndr_code")
-        await collections["courier_events"].create_index("timestamp")
-        
-        await collections["addresses"].create_index("pincode")
-        await collections["addresses"].create_index([("latitude", 1), ("longitude", 1)])
-        
-        await collections["lane_scores"].create_index([("carrier", 1), ("dest_pincode", 1)])
-        await collections["lane_scores"].create_index("week_start")
-        
-        logger.info("Database indexes created successfully")
+        # Test MongoDB connection if available
+        if client and db:
+            await client.admin.command('ismaster')
+            logger.info("MongoDB connection successful")
+            
+            # Create indexes for better performance only if DB is available
+            await collections["orders"].create_index("order_id", unique=True)
+            await collections["orders"].create_index("brand_id")
+            await collections["orders"].create_index("status")
+            await collections["orders"].create_index("payment_mode")
+            
+            await collections["shipments"].create_index("shipment_id", unique=True)
+            await collections["shipments"].create_index("order_id")
+            await collections["shipments"].create_index("carrier")
+            await collections["shipments"].create_index("current_status")
+            
+            await collections["courier_events"].create_index("shipment_id")
+            await collections["courier_events"].create_index("event_code")
+            await collections["courier_events"].create_index("ndr_code")
+            await collections["courier_events"].create_index("timestamp")
+            
+            await collections["addresses"].create_index("pincode")
+            await collections["addresses"].create_index([("latitude", 1), ("longitude", 1)])
+            
+            await collections["lane_scores"].create_index([("carrier", 1), ("dest_pincode", 1)])
+            await collections["lane_scores"].create_index("week_start")
+            
+            logger.info("Database indexes created successfully")
+        else:
+            logger.warning("Starting without database connection - will use mock data")
     except Exception as e:
-        logger.error("Failed to initialize database", error=str(e))
-        raise
+        logger.warning("Database initialization failed, continuing with limited functionality", error=str(e))
     
     yield
     
     # Shutdown
     logger.info("Shutting down RTO Optimizer API")
-    client.close()
+    if client:
+        client.close()
 
 app = FastAPI(
     title="RTO Optimizer API",
