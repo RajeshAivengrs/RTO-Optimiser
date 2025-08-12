@@ -54,7 +54,8 @@ collections = {
     "courier_events": db.courier_events,
     "risk_scores": db.risk_scores,
     "lane_scores": db.lane_scores,
-    "message_events": db.message_events
+    "message_events": db.message_events,
+    "ndr_challenges": db.ndr_challenges
 }
 
 # Pydantic Models for API
