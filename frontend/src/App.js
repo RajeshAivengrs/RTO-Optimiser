@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 
-// Import UI components
+// Import components
 import { Card } from './components/ui/card';
 import { Button } from './components/ui/button';
 import { Badge } from './components/ui/badge';
@@ -9,6 +10,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './components/ui/table';
 import { Progress } from './components/ui/progress';
 import { Alert, AlertDescription } from './components/ui/alert';
+
+// Import new components
+import SellerDashboard from './components/SellerDashboard';
+import WhatsAppIntegration from './components/WhatsAppIntegration';
 
 // Icons from lucide-react
 import { 
@@ -23,7 +28,10 @@ import {
   Users,
   MapPin,
   Phone,
-  RefreshCw
+  RefreshCw,
+  Shield,
+  MessageCircle,
+  Settings
 } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
