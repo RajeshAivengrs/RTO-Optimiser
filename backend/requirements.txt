@@ -20,3 +20,4 @@ structlog==23.2.0
 asyncio-mqtt==0.16.1
 redis==5.0.1
 celery==5.3.4
+emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
