@@ -84,6 +84,10 @@ async def trigger_ndr_resolution(request: NDRTriggerRequest):
                 message="WhatsApp notification disabled for this order"
             )
         
+        # Import here to avoid circular import
+        from whatsapp_service import WhatsAppNDRService
+        whatsapp_service = WhatsAppNDRService()
+        
         # Send NDR resolution options to customer
         result = await whatsapp_service.send_ndr_resolution_options(
             order_id=request.order_id,
