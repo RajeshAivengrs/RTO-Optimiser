@@ -119,6 +119,10 @@ async def send_whatsapp_message(
 ):
     """Send a custom WhatsApp message"""
     try:
+        # Import here to avoid circular import
+        from whatsapp_service import WhatsAppNDRService
+        whatsapp_service = WhatsAppNDRService()
+        
         result = await whatsapp_service.whatsapp.send_message(
             phone_number=phone_number,
             message=message
