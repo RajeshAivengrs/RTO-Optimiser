@@ -38,6 +38,9 @@ logger = structlog.get_logger()
 
 # Environment configuration
 MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017/rto_optimizer")
+if not MONGO_URL.startswith("mongodb"):
+    MONGO_URL = f"mongodb://{MONGO_URL}/rto_optimizer" if MONGO_URL else "mongodb://localhost:27017/rto_optimizer"
+
 TIMEZONE = pytz.timezone(os.getenv("TIMEZONE", "Asia/Kolkata"))
 
 # Database setup
