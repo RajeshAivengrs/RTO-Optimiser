@@ -370,5 +370,4 @@ For other inquiries, please contact our support team at 1800-123-4567."""
         await self.whatsapp.send_message(phone_number, response)
         return {"success": True, "action": "general_response_sent"}
 
-# Global WhatsApp service instance
-whatsapp_service = WhatsAppNDRService()
+# WhatsApp service instance will be created per request to avoid circular imports
