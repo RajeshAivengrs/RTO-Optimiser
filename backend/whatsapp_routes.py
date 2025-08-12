@@ -162,6 +162,10 @@ async def get_whatsapp_status():
 async def get_pending_responses():
     """Get list of pending customer responses"""
     try:
+        # Import here to avoid circular import
+        from whatsapp_service import WhatsAppNDRService
+        whatsapp_service = WhatsAppNDRService()
+        
         pending = whatsapp_service.pending_responses
         
         # Filter out expired responses (older than 2 hours)
