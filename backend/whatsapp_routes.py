@@ -142,7 +142,9 @@ async def send_whatsapp_message(
 async def get_whatsapp_status():
     """Get WhatsApp service status"""
     try:
-        # Check if WhatsApp service is initialized
+        # Check if WhatsApp service can be initialized
+        from whatsapp_service import WhatsAppNDRService
+        whatsapp_service = WhatsAppNDRService()
         status = "connected" if whatsapp_service.whatsapp else "disconnected"
         
         return {
