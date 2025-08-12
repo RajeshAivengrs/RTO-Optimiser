@@ -275,7 +275,7 @@ async def health_check():
     try:
         # Test MongoDB connection if available
         db_status = "disconnected"
-        if client and db:
+        if client is not None and db is not None:
             await client.admin.command('ismaster')
             db_status = "connected"
         
