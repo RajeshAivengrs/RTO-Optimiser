@@ -152,8 +152,7 @@ async def get_seller_dashboard(
 @router.get("/orders/{brand_id}/{order_id}")
 async def get_order_transparency(
     brand_id: str,
-    order_id: str,
-    db = Depends(get_database)
+    order_id: str
 ):
     """Get detailed transparency view for a specific order"""
     try:
