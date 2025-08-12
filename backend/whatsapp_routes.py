@@ -59,6 +59,10 @@ async def whatsapp_webhook(
 async def process_whatsapp_message(phone_number: str, message: str):
     """Background task to process WhatsApp messages"""
     try:
+        # Import here to avoid circular import
+        from whatsapp_service import WhatsAppNDRService
+        whatsapp_service = WhatsAppNDRService()
+        
         result = await whatsapp_service.process_customer_response(phone_number, message)
         
         logger.info("WhatsApp message processed", 
