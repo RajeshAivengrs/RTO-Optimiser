@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import './App.css';
 
 // Import components
@@ -36,7 +36,57 @@ import {
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-function App() {
+// Navigation Component
+const Navigation = () => {
+  const location = useLocation();
+  
+  const navItems = [
+    { path: '/', label: 'Operations Dashboard', icon: <BarChart3 className="h-5 w-5" /> },
+    { path: '/seller', label: 'Seller Portal', icon: <Shield className="h-5 w-5" /> },
+    { path: '/whatsapp', label: 'WhatsApp Integration', icon: <MessageCircle className="h-5 w-5" /> }
+  ];
+  
+  return (
+    <nav className="bg-white shadow-sm border-b">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <div className="flex items-center space-x-8">
+            <div className="flex items-center space-x-3">
+              <Package className="h-8 w-8 text-blue-600" />
+              <div>
+                <h1 className="text-xl font-bold text-gray-900">RTO Optimizer</h1>
+                <p className="text-sm text-gray-500">Bengaluru PoC Platform</p>
+              </div>
+            </div>
+            
+            <div className="flex space-x-1">
+              {navItems.map((item) => {
+                const isActive = location.pathname === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                      isActive 
+                        ? 'bg-blue-100 text-blue-700' 
+                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    {item.icon}
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+// Main Operations Dashboard Component
+const OperationsDashboard = () => {
   const [kpiData, setKpiData] = useState({
     rto_rate: 0,
     adoption_rate: 0,
@@ -199,45 +249,14 @@ function App() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="flex items-center space-x-2">
           <RefreshCw className="h-6 w-6 animate-spin text-blue-600" />
-          <span className="text-lg font-medium">Loading RTO Optimizer...</span>
+          <span className="text-lg font-medium">Loading Dashboard...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-3">
-              <Package className="h-8 w-8 text-blue-600" />
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">RTO Optimizer</h1>
-                <p className="text-sm text-gray-500">Bengaluru PoC Dashboard</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-500">
-                Last updated: {lastUpdated.toLocaleTimeString()}
-              </span>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => {
-                  fetchKPIs();
-                  fetchScorecard();
-                }}
-              >
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-
+    <div className="bg-gray-50 min-h-screen">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {error && (
           <Alert className="mb-6">
@@ -292,7 +311,20 @@ function App() {
                   <h2 className="text-xl font-semibold text-gray-900">
                     Weekly Carrier Performance Scorecard
                   </h2>
-                  <Badge variant="outline">Current Week: 2024-W01</Badge>
+                  <div className="flex items-center space-x-4">
+                    <Badge variant="outline">Current Week: 2024-W01</Badge>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => {
+                        fetchKPIs();
+                        fetchScorecard();
+                      }}
+                    >
+                      <RefreshCw className="h-4 w-4 mr-2" />
+                      Refresh
+                    </Button>
+                  </div>
                 </div>
 
                 <div className="overflow-x-auto">
@@ -408,24 +440,6 @@ function App() {
                     </AlertDescription>
                   </Alert>
                 </div>
-
-                <div className="mt-8">
-                  <h3 className="text-lg font-medium mb-4">Alert Thresholds</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Card className="p-4">
-                      <h4 className="font-medium text-red-600 mb-2">False Attempt Rate</h4>
-                      <p className="text-sm text-gray-600">
-                        Medium: ≥10% | High: ≥15%
-                      </p>
-                    </Card>
-                    <Card className="p-4">
-                      <h4 className="font-medium text-red-600 mb-2">Suspect NDR Rate</h4>
-                      <p className="text-sm text-gray-600">
-                        Medium: ≥5% | High: ≥8%
-                      </p>
-                    </Card>
-                  </div>
-                </div>
               </div>
             </Card>
           </TabsContent>
@@ -485,15 +499,6 @@ function App() {
                       </div>
                     </Card>
                   </div>
-
-                  <div className="mt-6">
-                    <Button variant="outline" className="mr-2">
-                      Edit Weights
-                    </Button>
-                    <Button>
-                      Save Configuration
-                    </Button>
-                  </div>
                 </div>
               </div>
             </Card>
@@ -501,6 +506,22 @@ function App() {
         </Tabs>
       </main>
     </div>
+  );
+};
+
+// Main App Component with Router
+function App() {
+  return (
+    <Router>
+      <div className="App">
+        <Navigation />
+        <Routes>
+          <Route path="/" element={<OperationsDashboard />} />
+          <Route path="/seller" element={<SellerDashboard />} />
+          <Route path="/whatsapp" element={<WhatsAppIntegration />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
