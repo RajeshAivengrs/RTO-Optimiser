@@ -357,10 +357,7 @@ async def challenge_ndr(challenge: NDRChallenge):
         raise HTTPException(status_code=500, detail="Failed to submit challenge")
 
 @router.get("/alerts/{brand_id}")
-async def get_seller_alerts(
-    brand_id: str,
-    db = Depends(get_database)
-):
+async def get_seller_alerts(brand_id: str):
     """Get real-time alerts for seller"""
     try:
         alerts = []
