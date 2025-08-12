@@ -608,7 +608,13 @@ async def ndr_resolution(
         logger.error("Unexpected error", error=str(e))
         raise HTTPException(status_code=500, detail="Internal server error")
 
-# Analytics and KPI endpoints
+from server import collections, get_current_time
+from seller_routes import router as seller_router
+from whatsapp_routes import router as whatsapp_router
+
+# Add the new routers to the app
+app.include_router(seller_router)
+app.include_router(whatsapp_router)
 
 @app.get("/api/analytics/kpis")
 async def get_kpis():
