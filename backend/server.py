@@ -184,7 +184,7 @@ async def lifespan(app: FastAPI):
     logger.info("Starting RTO Optimizer API")
     try:
         # Test MongoDB connection if available
-        if client and db:
+        if client is not None and db is not None:
             await client.admin.command('ismaster')
             logger.info("MongoDB connection successful")
             
