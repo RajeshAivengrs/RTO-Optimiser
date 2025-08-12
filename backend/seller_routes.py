@@ -288,10 +288,7 @@ async def get_order_transparency(
         raise HTTPException(status_code=500, detail="Failed to fetch order details")
 
 @router.post("/challenge-ndr")
-async def challenge_ndr(
-    challenge: NDRChallenge,
-    db = Depends(get_database)
-):
+async def challenge_ndr(challenge: NDRChallenge):
     """Allow sellers to challenge suspicious NDRs"""
     try:
         # Get the order
