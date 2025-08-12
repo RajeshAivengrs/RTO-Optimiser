@@ -4,7 +4,9 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 import uuid
 import structlog
-from motor.motor_asyncio import AsyncIOMotorClient
+
+# Import the database collections from server.py
+from server import collections, get_current_time
 
 router = APIRouter(prefix="/api/seller", tags=["seller"])
 logger = structlog.get_logger()
