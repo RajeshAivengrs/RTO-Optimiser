@@ -708,6 +708,17 @@ async def get_weekly_scorecard():
         logger.error("Failed to fetch scorecard", error=str(e))
         raise HTTPException(status_code=500, detail="Failed to fetch scorecard data")
 
+# Import and add routers
+try:
+    from seller_routes import router as seller_router
+    from whatsapp_routes import router as whatsapp_router
+    
+    app.include_router(seller_router)
+    app.include_router(whatsapp_router)
+    logger.info("Additional routers loaded successfully")
+except ImportError as e:
+    logger.warning("Could not load additional routers", error=str(e))
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
