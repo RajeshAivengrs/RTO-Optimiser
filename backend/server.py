@@ -56,16 +56,16 @@ except Exception as e:
 
 # MongoDB Collections with null safety
 collections = {
-    "brands": db.brands if db else None,
-    "orders": db.orders if db else None,
-    "addresses": db.addresses if db else None,
-    "items": db.items if db else None,
-    "shipments": db.shipments if db else None,
-    "courier_events": db.courier_events if db else None,
-    "risk_scores": db.risk_scores if db else None,
-    "lane_scores": db.lane_scores if db else None,
-    "message_events": db.message_events if db else None,
-    "ndr_challenges": db.ndr_challenges if db else None
+    "brands": db.brands if db is not None else None,
+    "orders": db.orders if db is not None else None,
+    "addresses": db.addresses if db is not None else None,
+    "items": db.items if db is not None else None,
+    "shipments": db.shipments if db is not None else None,
+    "courier_events": db.courier_events if db is not None else None,
+    "risk_scores": db.risk_scores if db is not None else None,
+    "lane_scores": db.lane_scores if db is not None else None,
+    "message_events": db.message_events if db is not None else None,
+    "ndr_challenges": db.ndr_challenges if db is not None else None
 }
 
 # Pydantic Models for API
