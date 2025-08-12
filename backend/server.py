@@ -632,13 +632,11 @@ async def ndr_resolution(
         logger.error("Unexpected error", error=str(e))
         raise HTTPException(status_code=500, detail="Internal server error")
 
-from server import collections, get_current_time
-from seller_routes import router as seller_router
-from whatsapp_routes import router as whatsapp_router
-
-# Add the new routers to the app
-app.include_router(seller_router)
-app.include_router(whatsapp_router)
+async def get_database_safe():
+    """Get database safely, return None if unavailable"""
+    if db and collections.get("orders"):
+        return True
+    return False
 
 @app.get("/api/analytics/kpis")
 async def get_kpis():
