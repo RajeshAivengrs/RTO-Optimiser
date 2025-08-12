@@ -54,18 +54,18 @@ except Exception as e:
     client = None
     db = None
 
-# MongoDB Collections
+# MongoDB Collections with null safety
 collections = {
-    "brands": db.brands,
-    "orders": db.orders,
-    "addresses": db.addresses,
-    "items": db.items,
-    "shipments": db.shipments,
-    "courier_events": db.courier_events,
-    "risk_scores": db.risk_scores,
-    "lane_scores": db.lane_scores,
-    "message_events": db.message_events,
-    "ndr_challenges": db.ndr_challenges
+    "brands": db.brands if db else None,
+    "orders": db.orders if db else None,
+    "addresses": db.addresses if db else None,
+    "items": db.items if db else None,
+    "shipments": db.shipments if db else None,
+    "courier_events": db.courier_events if db else None,
+    "risk_scores": db.risk_scores if db else None,
+    "lane_scores": db.lane_scores if db else None,
+    "message_events": db.message_events if db else None,
+    "ndr_challenges": db.ndr_challenges if db else None
 }
 
 # Pydantic Models for API
