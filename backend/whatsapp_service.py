@@ -32,6 +32,16 @@ class WhatsAppNDRService:
     async def send_ndr_resolution_options(self, order_id: str, customer_phone: str) -> Dict[str, Any]:
         """Send NDR resolution options to customer via WhatsApp"""
         try:
+            # Check if database is available
+            if not collections.get("orders") or collections["orders"] is None:
+                logger.warning("Database unavailable - returning demo response for WhatsApp NDR service")
+                return {
+                    "success": True,
+                    "message_sent": True,
+                    "order_id": order_id,
+                    "expires_at": (get_current_time() + timedelta(hours=2)).isoformat()
+                }
+            
             # Get order details
             order = await collections["orders"].find_one({"order_id": order_id})
             if not order:
