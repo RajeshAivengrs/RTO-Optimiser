@@ -43,14 +43,21 @@ if not MONGO_URL.startswith("mongodb"):
 
 TIMEZONE = pytz.timezone(os.getenv("TIMEZONE", "Asia/Kolkata"))
 
-# Database setup with error handling for deployment
+# Database setup with complete error isolation for deployment
+client = None
+db = None
+
 try:
-    client = AsyncIOMotorClient(MONGO_URL)
-    db = client.get_database()
-    logger.info("Database connection initialized", mongo_url=MONGO_URL[:20] + "...")
+    # Only attempt MongoDB connection if explicitly configured
+    mongo_url = os.getenv("MONGO_URL")
+    if mongo_url:
+        client = AsyncIOMotorClient(mongo_url)
+        db = client.get_database()
+        logger.info("MongoDB client initialized - connection will be tested on first use")
+    else:
+        logger.info("No MONGO_URL provided - running in demo mode")
 except Exception as e:
-    logger.error("Database connection failed", error=str(e), mongo_url=MONGO_URL[:20] + "...")
-    # Continue with app initialization even if DB connection fails initially
+    logger.warning("MongoDB client initialization failed - running in demo mode", error=str(e))
     client = None
     db = None
 
