@@ -183,45 +183,52 @@ async def lifespan(app: FastAPI):
     # Startup
     logger.info("Starting RTO Optimizer API")
     try:
-        # Test MongoDB connection if available
+        # Test MongoDB connection if available - but don't fail startup if it's not available
         if client is not None and db is not None:
             await client.admin.command('ismaster')
             logger.info("MongoDB connection successful")
             
             # Create indexes for better performance only if DB is available
-            await collections["orders"].create_index("order_id", unique=True)
-            await collections["orders"].create_index("brand_id")
-            await collections["orders"].create_index("status")
-            await collections["orders"].create_index("payment_mode")
-            
-            await collections["shipments"].create_index("shipment_id", unique=True)
-            await collections["shipments"].create_index("order_id")
-            await collections["shipments"].create_index("carrier")
-            await collections["shipments"].create_index("current_status")
-            
-            await collections["courier_events"].create_index("shipment_id")
-            await collections["courier_events"].create_index("event_code")
-            await collections["courier_events"].create_index("ndr_code")
-            await collections["courier_events"].create_index("timestamp")
-            
-            await collections["addresses"].create_index("pincode")
-            await collections["addresses"].create_index([("latitude", 1), ("longitude", 1)])
-            
-            await collections["lane_scores"].create_index([("carrier", 1), ("dest_pincode", 1)])
-            await collections["lane_scores"].create_index("week_start")
-            
-            logger.info("Database indexes created successfully")
+            try:
+                await collections["orders"].create_index("order_id", unique=True)
+                await collections["orders"].create_index("brand_id")
+                await collections["orders"].create_index("status")
+                await collections["orders"].create_index("payment_mode")
+                
+                await collections["shipments"].create_index("shipment_id", unique=True)
+                await collections["shipments"].create_index("order_id")
+                await collections["shipments"].create_index("carrier")
+                await collections["shipments"].create_index("current_status")
+                
+                await collections["courier_events"].create_index("shipment_id")
+                await collections["courier_events"].create_index("event_code")
+                await collections["courier_events"].create_index("ndr_code")
+                await collections["courier_events"].create_index("timestamp")
+                
+                await collections["addresses"].create_index("pincode")
+                await collections["addresses"].create_index([("latitude", 1), ("longitude", 1)])
+                
+                await collections["lane_scores"].create_index([("carrier", 1), ("dest_pincode", 1)])
+                await collections["lane_scores"].create_index("week_start")
+                
+                logger.info("Database indexes created successfully")
+            except Exception as index_error:
+                logger.warning("Could not create database indexes", error=str(index_error))
         else:
-            logger.warning("Starting without database connection - will use mock data")
+            logger.warning("Starting without database connection - using demo mode")
     except Exception as e:
-        logger.warning("Database initialization failed, continuing with limited functionality", error=str(e))
+        logger.warning("Database connection failed during startup - continuing with demo mode", error=str(e))
+        # Continue startup even if MongoDB authentication fails
     
     yield
     
     # Shutdown
     logger.info("Shutting down RTO Optimizer API")
-    if client is not None:
-        client.close()
+    try:
+        if client is not None:
+            client.close()
+    except Exception as e:
+        logger.warning("Error during MongoDB client closure", error=str(e))
 
 app = FastAPI(
     title="RTO Optimizer API",
