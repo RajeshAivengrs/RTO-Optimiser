@@ -59,6 +59,12 @@ async def whatsapp_webhook(
 async def process_whatsapp_message(phone_number: str, message: str):
     """Background task to process WhatsApp messages"""
     try:
+        # Check if database is available first
+        if not collections.get("orders") or collections["orders"] is None:
+            logger.warning("Database unavailable - skipping WhatsApp message processing", 
+                         phone=phone_number[:8] + "XXX")
+            return
+        
         # Import here to avoid circular import
         from whatsapp_service import WhatsAppNDRService
         whatsapp_service = WhatsAppNDRService()
