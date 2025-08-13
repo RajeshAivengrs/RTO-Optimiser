@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from typing import Dict, Any
 
 class RTOOptimizerTester:
-    def __init__(self, base_url="https://a8508224-b4c1-4382-818f-8c1b88f43ba8.preview.emergentagent.com"):
+    def __init__(self, base_url="https://ndr-resolver.preview.emergentagent.com"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
