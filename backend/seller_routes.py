@@ -604,7 +604,23 @@ async def get_seller_alerts(brand_id: str):
         
     except Exception as e:
         logger.error("Failed to get seller alerts", error=str(e), brand_id=brand_id)
-        raise HTTPException(status_code=500, detail="Failed to fetch alerts")
+        # Return demo alerts as fallback instead of raising error
+        return {
+            "brand_id": brand_id,
+            "alerts": [
+                {
+                    "type": "SYSTEM_ERROR",
+                    "severity": "medium",
+                    "title": "Alert System Unavailable",
+                    "message": "Unable to fetch real-time alerts - system may be under maintenance",
+                    "action_required": False,
+                    "suggestions": ["Please try again later", "Contact support if issue persists"]
+                }
+            ],
+            "total_count": 1,
+            "high_priority_count": 0,
+            "last_updated": datetime.now().isoformat()
+        }
 
 # Helper function to get database (to be imported from main server.py)
 async def get_database():
