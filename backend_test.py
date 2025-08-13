@@ -330,6 +330,59 @@ class RTOOptimizerTester:
             200
         )
 
+    def test_seller_dashboard(self):
+        """Test seller dashboard endpoint"""
+        return self.run_test(
+            "Seller Dashboard",
+            "GET",
+            "api/seller/dashboard/test-brand",
+            200
+        )
+
+    def test_seller_order_transparency(self):
+        """Test seller order transparency endpoint"""
+        return self.run_test(
+            "Seller Order Transparency",
+            "GET",
+            "api/seller/orders/test-brand/test-order",
+            200
+        )
+
+    def test_seller_alerts(self):
+        """Test seller alerts endpoint"""
+        return self.run_test(
+            "Seller Alerts",
+            "GET",
+            "api/seller/alerts/test-brand",
+            200
+        )
+
+    def test_whatsapp_trigger_ndr(self):
+        """Test WhatsApp trigger NDR endpoint"""
+        ndr_data = {
+            "order_id": f"test-order-{datetime.now().strftime('%Y%m%d%H%M%S')}",
+            "customer_phone": "+919876543210",
+            "ndr_reason": "Customer unavailable",
+            "trigger_whatsapp": True
+        }
+        
+        return self.run_test(
+            "WhatsApp Trigger NDR",
+            "POST",
+            "api/whatsapp/trigger-ndr",
+            200,
+            ndr_data
+        )
+
+    def test_whatsapp_analytics(self):
+        """Test WhatsApp analytics endpoint"""
+        return self.run_test(
+            "WhatsApp Analytics",
+            "GET",
+            "api/whatsapp/analytics",
+            200
+        )
+
     def run_all_tests(self):
         """Run all backend tests"""
         print("🚀 Starting RTO Optimizer Backend API Tests")
