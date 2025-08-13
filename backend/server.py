@@ -37,10 +37,9 @@ structlog.configure(
 logger = structlog.get_logger()
 
 # Environment configuration
-# Simulate deployment environment - use invalid MongoDB URL to test error handling
-MONGO_URL = os.getenv("MONGO_URL", "mongodb://invalid:27017/rto_optimizer")
+MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017/rto_optimizer")
 if not MONGO_URL.startswith("mongodb"):
-    MONGO_URL = f"mongodb://{MONGO_URL}/rto_optimizer" if MONGO_URL else "mongodb://invalid:27017/rto_optimizer"
+    MONGO_URL = f"mongodb://{MONGO_URL}/rto_optimizer" if MONGO_URL else "mongodb://localhost:27017/rto_optimizer"
 
 TIMEZONE = pytz.timezone(os.getenv("TIMEZONE", "Asia/Kolkata"))
 
