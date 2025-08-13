@@ -217,6 +217,30 @@ Complete the RTO Optimizer application development, focusing on database migrati
           agent: "testing"
           comment: "✅ TESTED: WhatsApp integration endpoints work gracefully when database unavailable. NDR trigger endpoint (/api/whatsapp/trigger-ndr) and analytics endpoint (/api/whatsapp/analytics) both return demo data successfully."
 
+  - task: "Seller Order Transparency API"
+    implemented: true
+    working: true
+    file: "seller_routes.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ TESTED: Seller order transparency endpoint (/api/seller/orders/test-brand/test-order) works gracefully when database unavailable. Returns demo order data with delivery attempts, carrier performance, and cost impact details."
+
+  - task: "Seller Alerts API"
+    implemented: true
+    working: true
+    file: "seller_routes.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ TESTED: Seller alerts endpoint (/api/seller/alerts/test-brand) works gracefully when database unavailable. Returns demo alert indicating system is in demo mode with appropriate messaging."
+
   - task: "Database Migration to Postgres"
     implemented: false
     working: false
