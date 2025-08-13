@@ -509,6 +509,26 @@ async def challenge_ndr(challenge: NDRChallenge):
 async def get_seller_alerts(brand_id: str):
     """Get real-time alerts for seller"""
     try:
+        # Check if database is available
+        if not collections.get("orders") or collections["orders"] is None:
+            logger.warning("Database unavailable - returning demo alerts")
+            return {
+                "brand_id": brand_id,
+                "alerts": [
+                    {
+                        "type": "DEMO_ALERT",
+                        "severity": "info",
+                        "title": "Demo Mode Active",
+                        "message": "System running in demo mode - database unavailable",
+                        "action_required": False,
+                        "suggestions": []
+                    }
+                ],
+                "total_count": 1,
+                "high_priority_count": 0,
+                "last_updated": datetime.now().isoformat()
+            }
+        
         alerts = []
         
         # Check for high RTO rate alerts
