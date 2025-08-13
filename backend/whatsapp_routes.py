@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
+from datetime import timedelta
 import structlog
 # Remove circular import - whatsapp_service will be imported within functions
 from server import collections, get_current_time
