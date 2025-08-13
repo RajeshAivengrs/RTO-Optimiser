@@ -174,15 +174,18 @@ Complete the RTO Optimizer application development, focusing on database migrati
 
   - task: "NDR Resolution API"
     implemented: true
-    working: false
+    working: true
     file: "server.py"
     stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: false
           agent: "main"
           comment: "NDR resolution may crash when database unavailable - needs graceful handling"
+        - working: true
+          agent: "testing"
+          comment: "✅ TESTED: NDR resolution endpoint works gracefully when database unavailable. Returns success response with demo mode message. Handles all resolution actions (RESCHEDULE, CHANGE_ADDRESS, DISPUTE, RTO) correctly."
 
   - task: "Seller Dashboard API"
     implemented: true
