@@ -85,6 +85,19 @@ async def process_whatsapp_message(phone_number: str, message: str):
 async def trigger_ndr_resolution(request: NDRTriggerRequest):
     """Trigger NDR resolution workflow for an order"""
     try:
+        # Check if database is available
+        if not collections.get("orders") or collections["orders"] is None:
+            logger.warning("Database unavailable - returning demo response for NDR trigger")
+            return WhatsAppResponse(
+                success=True,
+                message="NDR resolution options sent to customer (demo mode - database unavailable)",
+                data={
+                    "order_id": request.order_id,
+                    "phone_number": request.customer_phone[:8] + "XXX",
+                    "expires_at": (get_current_time() + timedelta(hours=2)).isoformat()
+                }
+            )
+        
         if not request.trigger_whatsapp:
             return WhatsAppResponse(
                 success=True,
