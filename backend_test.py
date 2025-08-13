@@ -412,6 +412,15 @@ class RTOOptimizerTester:
         self.test_analytics_kpis()
         self.test_analytics_scorecard()
         
+        # Seller portal tests
+        self.test_seller_dashboard()
+        self.test_seller_order_transparency()
+        self.test_seller_alerts()
+        
+        # WhatsApp integration tests
+        self.test_whatsapp_trigger_ndr()
+        self.test_whatsapp_analytics()
+        
         # Print summary
         print("\n" + "=" * 60)
         print(f"📊 Test Summary:")
